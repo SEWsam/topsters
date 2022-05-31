@@ -1,0 +1,40 @@
+.card-row {
+    width: 100%;
+    /* funny image thing. without it there is space below the cards. */
+    line-height: 0px;
+
+}
+
+.align-justify {
+    text-align: justify;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.card-row .card {
+    display: inline-block;
+    zoom: 1;
+}
+
+.size-150 .card {
+    width: 150px;
+    height: 150px;
+}
+
+.size-125 .card {
+    width: 125px;
+    height: 125px;
+}
+
+.size-75 .card {
+    width: 75px;
+    height: 75px;
+}
+
+.card-row:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}

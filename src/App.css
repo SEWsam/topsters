@@ -1,5 +1,23 @@
+
 .App {
-  text-align: center;
+  background-color: #282c34;
+  background-size: cover !important;
+  background-position: 50% !important;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+#chart-wrapper {
+  margin: 35px 45px 45px 35px;
+  z-index: 1;
+  padding: 25px;
+  position: absolute;
+  transform-origin: 0 0 0;
+  display: table;
+  border: 1px solid #999;
+  background-size: cover !important;
+  background-position: 50% !important;
 }
 
 .App-logo {
