@@ -3,7 +3,7 @@ import "./style.css"
 import { useDrag, useDrop } from 'react-dnd'
 import 'normalize.css';
 
-export default function Card({src, index, padding, moveCard}) {
+export default function Card({src, index, padding, moveCard, children}) {
 
     // useDrag - the list item is draggable
     const [{ isDragging }, dragRef] = useDrag({
@@ -44,7 +44,9 @@ export default function Card({src, index, padding, moveCard}) {
 
     return (
         <div ref={dragDropRef} className="card" style={{padding: padding, opacity}}>
-            <div className="inner" style={{backgroundImage: `url(${src})`}}></div>
+            <div className="inner" style={{backgroundImage: `url(${src})`}}>
+                <p>{children}</p>
+            </div>
         </div>
     );
 }

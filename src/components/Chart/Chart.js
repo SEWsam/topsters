@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Children, useCallback, useState } from 'react';
 import Card from '../Card/Card';
 import CardRow from '../CardRow/CardRow';
 import "./style.css";
@@ -15,37 +15,41 @@ export const CARDS = (() => {
 
 
 export default function Chart(props) {
-    const renderCards = () => {
-        const cardSlice = props.cards.slice(0, props.size);
-        const ret = cardSlice.map((cards, index) => {
-            return (<Card key={cards.id} index={index} padding={props.padding} src={cards.src}></Card>);
-        });
-        return ret;
-    };
     
-    // todo: this is bug prone: doesn't take into account length of cards array
+    // todo: fix performance by creating list of card elements only once
     const renderRows = (cards) => {
         const rows = [];
         let i = 0;
-        for (let j = 0; j < props.rows.length; j++) {
-            const row = props.rows[j];
-            const rowElements = [];
-            for (let k = 0; k < row.len; k++) {
-                rowElements.push(cards[i]);
+        // this should not be needed, but this is safer
+        while (i < cards.length) {
+            for (let j = 0; j < props.rows.length; j++) {
+                const row = props.rows[j];
+                const rowElements = [];
+                for (let k = 0; k < row.len; k++) {
+                    const card = cards[i];
+                    const padding = 
+                        `${row.pad_mult[0] * props.padding}px ${row.pad_mult[1] * props.padding}px 
+                        ${row.pad_mult[2] * props.padding}px ${row.pad_mult[3] * props.padding}px`;
+                    rowElements.push(<Card key={card.id} index={i} padding={padding} src={card.src} moveCard={props.moveCard}></Card>);
 
-                // fix alignment with zero space element
-                if (k < row.len) {
-                    rowElements.push(<span className="zero-space"> </span>);
+                    // fix alignment with zero space element
+                    if (k < row.len) {
+                        rowElements.push(<span key={"zspace-"+k} className="zero-space"> </span>);
+                    }
+                    i++
                 }
-                i++
+                rows.push(<CardRow key={"row-"+j} size={row.size}>{rowElements}</CardRow>) 
             }
-            rows.push(<CardRow size={row.size}>{rowElements}</CardRow>) 
+            return rows;
         }
-        return rows;
     }
+
+    //let rows = renderRows(props.cards);
     return (
         <div className="chart" style={{width: `${750 + (props.padding * 20)}`}}>
-        {renderRows(renderCards())}
+        {props.cards.map((card, i) => {
+            return <Card key={card.id} padding={props.padding} index={i} src={card.src} moveCard={props.moveCard}>{card.id}</Card>
+        })}
         </div>
     );
 }

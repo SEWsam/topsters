@@ -1,8 +1,7 @@
 .card-row {
     width: 100%;
     /* funny image thing. without it there is space below the cards. */
-    line-height: 0px;
-
+    font-size: 0;
 }
 
 .align-justify {
