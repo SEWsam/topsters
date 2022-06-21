@@ -1,10 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import Chart, { CARDS } from './components/Chart/Chart';
-import { useState, useCallback } from 'react';
+import { useState, useContext } from 'react';
 
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import ChartContext from './components/ChartContext';
 import 'normalize.css';
 
 
@@ -26,23 +25,7 @@ const ROWS_SIZE42 = [
 
 function App() {
   const [chartPadding, setChartPadding] = useState(2);
-  const [cards, setCards] = useState(CARDS);
-
-  const moveCard = useCallback(
-      (fromIndex, toIndex) => {
-        const draggedCard = cards[fromIndex];
-        const hoverCard = cards[toIndex];
-        setCards(() => {
-          //const updatedCards = cards.filter((_, index) => index !== fromIndex);
-          //updatedCards.splice(toIndex, 0, draggedCard);
-          const updatedCards = [...cards];
-          updatedCards[fromIndex] = hoverCard;
-          updatedCards[toIndex] = draggedCard;
-          return updatedCards
-        });
-      },
-      [cards]
-  );
+  const {items, moveItem} = useContext(ChartContext);
 
   const handlePaddingChanged = (event) => {
     setChartPadding(event.target.valueAsNumber);
@@ -56,11 +39,11 @@ function App() {
       <input type="range" min="0" max="20" defaultValue="2" onChange={handlePaddingChanged}>
       </input>
       <span>{chartPadding}</span>
-      <DndProvider backend={HTML5Backend}>
-        <div id="chart-wrapper" style={{background: "center center rgb(0, 0, 0)"}}>
-          <Chart padding={chartPadding} cards={cards} rows={ROWS_SIZE42} size={42} moveCard={moveCard}></Chart>
-        </div>
-      </DndProvider>
+      <div id="chart-wrapper">
+        <Chart padding={chartPadding} cards={items} moveItem={moveItem} rows={ROWS_SIZE42}>
+        </Chart>
+      </div>
+
     </div>
   );
 }
